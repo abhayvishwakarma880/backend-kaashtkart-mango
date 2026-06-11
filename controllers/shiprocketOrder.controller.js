@@ -41,8 +41,7 @@ export const createOrderForExisting = async (req, res) => {
       order.shippingCharges = newShippingCharge;
       const subtotal = order.subtotal || 0;
       const discount = order.discount || 0;
-      const handling = order.handlingFee || 0;
-      order.total = subtotal - discount + newShippingCharge + handling;
+      order.total = subtotal - discount + newShippingCharge;
       // We'll save after successful creation
     }
 

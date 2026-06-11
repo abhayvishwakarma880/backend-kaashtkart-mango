@@ -34,7 +34,6 @@ export const placeOrder = async (req, res) => {
       paymentMethod,
       notes,
       shippingCharges = 0,
-      handlingFee = 0,
       selectedCourier, // "shiprocket" or "delhivery"
       weight            // Total package weight from frontend (kg)
     } = req.body;
@@ -109,11 +108,10 @@ export const placeOrder = async (req, res) => {
 
     const { discount, total: discountedTotal } = applyOffer(offer, subtotal);
 
-    // 🚚 ADD SHIPPING + HANDLING
+    // 🚚 ADD SHIPPING
     const finalTotal =
       Number(discountedTotal) +
-      Number(shippingCharges) +
-      Number(handlingFee);
+      Number(shippingCharges);
 
     // 📦 CREATE ORDER IN DB
     const order = await Order.create({
@@ -122,7 +120,6 @@ export const placeOrder = async (req, res) => {
       subtotal,
       discount,
       shippingCharges: Number(shippingCharges),
-      handlingFee: Number(handlingFee),
       total: finalTotal,
       offerCode: offer ? offer.code : undefined,
       paymentMethod: paymentMethod || "COD",
@@ -264,8 +261,7 @@ export const updateOrderStatus = async (req, res) => {
           // Recalculate total
           const subtotal = order.subtotal || 0;
           const discount = order.discount || 0;
-          const handling = order.handlingFee || 0;
-          order.total = subtotal - discount + newShippingCharge + handling;
+          order.total = subtotal - discount + newShippingCharge;
           // Note: If paymentStatus was 'paid', we should ideally only do this for COD or handle the difference.
           // For now, we update as per user requirement.
         }
@@ -432,7 +428,7 @@ export const createManualShippingOrder = async (req, res) => {
       const subtotal = order.subtotal || 0;
       const discount = order.discount || 0;
       const handling = order.handlingFee || 0;
-      order.total = subtotal - discount + newShippingCharge + handling;
+      order.total = subtotal - discount + newShippingCharge;
     }
 
     // Call the universal selector
