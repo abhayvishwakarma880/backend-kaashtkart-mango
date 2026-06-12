@@ -24,7 +24,7 @@ export const getCart = async (req, res) => {
         if (!option) option = item.product.weightOptions[0]; // Fallback to first option
         
         if (option) {
-          const discount = item.product.discountPercent || 0;
+          const discount = option.discountPercent ?? item.product.discountPercent ?? 0;
           itemPrice = Math.round(option.price * (1 - discount / 100));
         }
       }
@@ -179,7 +179,7 @@ export const getCartTotal = async (req, res) => {
         if (!option) option = item.product.weightOptions[0]; // Fallback
         
         if (option) {
-          const discount = item.product.discountPercent || 0;
+          const discount = option.discountPercent ?? item.product.discountPercent ?? 0;
           itemPrice = Math.round(option.price * (1 - discount / 100));
         }
       }

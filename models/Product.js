@@ -42,6 +42,7 @@ const productSchema = new mongoose.Schema(
       {
         weight: { type: String, required: true },
         price: { type: Number, required: true },
+        discountPercent: { type: Number, default: 0, min: 0, max: 100 },
       }
     ],
 

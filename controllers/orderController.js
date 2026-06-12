@@ -70,7 +70,7 @@ export const placeOrder = async (req, res) => {
         let option = product.weightOptions.find(wo => wo.weight === item.size);
         if (!option) option = product.weightOptions[0]; // fallback
         if (option) {
-          const discount = product.discountPercent || 0;
+          const discount = option.discountPercent ?? product.discountPercent ?? 0;
           itemPrice = Math.round(option.price * (1 - discount / 100));
         }
       }

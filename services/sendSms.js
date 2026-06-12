@@ -24,7 +24,8 @@ export const sendOtpSms = async (Mobile, otp) => {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Basic ${authString}`
-      }
+      },
+      timeout: 50000
     });
 
     console.log("SMS API Response:", response.data);
